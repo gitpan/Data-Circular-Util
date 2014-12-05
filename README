@@ -1,0 +1,93 @@
+NAME
+    Data::Circular::Util - Data utilities
+
+VERSION
+    This document describes version 0.58 of Data::Circular::Util (from Perl
+    distribution Data-Circular-Util), released on 2014-12-05.
+
+SYNOPSIS
+DESCRIPTION
+FUNCTIONS
+  clone_circular_refs($data) -> any
+    Remove circular references by deep-copying them.
+
+    For example, this data:
+
+     $x = [1];
+     $data = [$x, 2, $x];
+
+    contains circular references by referring to $x twice. After
+    "clone_circular_refs", data will become:
+
+     $data = [$x, 2, [1]];
+
+    that is, the subsequent circular references will be deep-copied. This
+    makes it safe to transport to JSON, for example.
+
+    Sometimes it doesn't work, for example:
+
+     $data = [1];
+     push @$data, $data;
+
+    Cloning will still create circular references.
+
+    This function modifies the data structure in-place, and return true for
+    success and false upon failure.
+
+    Arguments ('*' denotes required arguments):
+
+    *   data* => *any*
+
+    Return value:
+
+     (any)
+
+  has_circular_ref($data) -> any
+    Check whether data item contains circular references.
+
+    Does not deal with weak references.
+
+    Arguments ('*' denotes required arguments):
+
+    *   data* => *any*
+
+    Return value:
+
+     (any)
+
+SEE ALSO
+    SHARYANTO
+
+    Data::Structure::Util has the XS version of "has_circular_ref" which is
+    at least around 3 times faster than this module's implementation which
+    is pure Perl. Use that instead if possible (in some cases,
+    Data::Structure::Util fails to build and this module provides an
+    alternative for that function). Data::Structure::Util does not the
+    equivalent of this module's "clone_circular_refs" though.
+
+    This module is however much faster than Devel::Cycle.
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Data-Circular-Util>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/perlancar/perl-SHARYANTO-Data-Util>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Data-Circular-Util>
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
+
+AUTHOR
+    perlancar <perlancar@cpan.org>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2014 by perlancar@cpan.org.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
